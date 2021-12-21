@@ -1,0 +1,24 @@
+{% extends  'base.html' %}
+
+{% block title %}
+Список заявок
+{% endblock title %}
+
+
+
+{% block content %}
+    <h1>Ваши заявки</h1>
+    {% for request in requests %}
+    <div class="card bg-light text-dark">
+        <div class="card-body">
+            <h4><b><a href="{% url 'chat_request' request.pk %}">Заявка №{{ request.pk }}: {{ request.title }}</a></b></h4>
+            <p class="lead">Организация: {{ request.account.name }}</p>
+            <p>Адрес {{ request.account.address }}, офис: {{ request.number_office }}</p>
+            <p><kbd>Дата и время создания заявки:</kbd> {{ request.date_creation }}</p>
+            <p><code>Статус:</code> {{ request.status }}</p>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+{% endblock %}
+

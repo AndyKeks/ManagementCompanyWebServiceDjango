@@ -1,0 +1,57 @@
+{% extends  'base.html' %}
+{% load crispy_forms_tags %}
+{% load static %}
+
+{% block title %}
+    Заявка № {{ selected.id }}
+{% endblock title %}
+
+
+{% block content %}
+    <div class="container">
+        <img align="center" src="{{ selected.image.url }}" class="img-thumbnail" width="500" height="500">
+    </div>
+
+    <h1 class="text-center">Чат по вашей заявке №{{ selected.id }}</h1>
+    <p><strong>Ваша проблема</strong>:{{ selected.title }}</p>
+    <div class="jumbotron" id="messages_area">
+        {% for message in messages %}
+            <div class='alert alert-success'>
+                <p class="lead">{{ message.request.account.representative }}</p>
+                <p>{{ message.content }}</p>
+                <kbd>{{ message.date }}</kbd>
+            </div>
+        {% endfor %}
+    </div>
+    <form method="POST" id="send_msg" action="{% url 'chat_request' selected.id %}">
+        {% csrf_token %}
+        <input type="hidden" id="username" value="{{ user.username }}"/>
+        <label>Введите сообщение</label>
+        <input type="text" id="content" class="form-control" /><br>
+        <input type="submit" class="btn btn-success btn-block" value="Отправить сообщение"/>
+    </form><br>
+    {% if is_manager %}
+        {% if selected.status == 'На рассмотрении' %}
+        <form method="POST" id="set_work" action="{% url 'set_status_work' selected.id %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-warning btn-block" value="Назначить статус: в работе">
+        </form><br>
+        <form method="POST" id="set_close" action="{% url 'set_status_close' selected.id %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger btn-block" value="Назначить статус: закрыт">
+        </form>
+        {% endif %}
+        {% if selected.status == 'В работе' %}
+        <form method="POST" id="set_close" action="{% url 'set_status_close' selected.id %}">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger btn-block" value="Назначить статус: закрыт">
+        </form>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block body_script %}
+<script type="text/javascript" src="{% static 'js/send_message.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/set_status_work.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/set_status_close.js' %}"></script>
+{% endblock body_script %}

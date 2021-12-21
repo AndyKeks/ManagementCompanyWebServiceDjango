@@ -1,0 +1,23 @@
+{% extends  'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+  Домашняя страница
+{% endblock %}
+
+{% block content %}
+    <h1><code>Данное приложение предназначено для облегчения взаимодействия
+    управляющей компании с потребителями через чат</code></h1>
+    {% if user.is_authenticated %}
+     <div class="btn-group btn-group-lg">
+        <a type="button" class="btn btn-primary" href="{% url 'list_requests' %}">Перейти к вашему списку заявок</a>
+        <a type="button" class="btn btn-primary" href="{% url 'create_request' %}">Создать новую заявку</a>
+    </div>
+    {% else %}
+    <p>Вы не авторизованы, авторизуйтесь!</p>
+     <div class="btn-group btn-group-lg">
+        <a type="button" class="btn btn-warning" href="{% url 'login' %}">Перейти на страницу авторизации</a>
+        <a type="button" class="btn btn-secondary" href="{% url 'register' %}">Перейти на страницу регистрации</a>
+    </div>
+    {% endif %}
+{% endblock %}

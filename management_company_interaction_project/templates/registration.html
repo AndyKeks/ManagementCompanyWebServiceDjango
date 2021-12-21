@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+    Регистрация
+{% endblock title %}
+
+{% block content %}
+    <h1 class="text-center">Регистрация нового аккаунта</h1>
+
+    <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+        <div class="jumbotron">
+            <h1>Информация об аккаунте</h1>
+            {{ form|crispy }}
+        </div>
+        <div class="jumbotron">
+            <h1>Информация об организации</h1>
+            {{ profile_form|crispy }}
+        </div>
+        <button type="submit" class="btn btn-danger btn-block">Зарегистрироваться</button>
+    </form>
+{% endblock content %}
